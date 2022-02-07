@@ -1,0 +1,259 @@
+.d__wrapper {
+    width: $max-width;
+    min-height: 100vh;
+}
+.d__side__nav {
+    width: $side-nav-width;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    &.hide-nav-content {
+        width: $mini-side-nav-width;
+        transition: width 0.2s cubic-bezier(0, 0, 0.55, 0.54);
+    }
+    &.hide-nav-content + main.d__main {
+        width: set-max-width($width: $mini-side-nav-width);
+        transition: width 0.2s cubic-bezier(0, 0, 0.55, 0.54);
+    }
+    &.show-nav-content {
+        width: $side-nav-width;
+        transition: width 0.2s cubic-bezier(0, 0, 0.55, 0.54);
+    }
+    &.show-nav-content + main.d__main {
+        width: set-max-width($width: $side-nav-width);
+        transition: width 0.2s cubic-bezier(0, 0, 0.55, 0.54);
+    }
+
+    &__mini {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $mini-side-nav-width;
+        height: 100%;
+        background: $primary;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        span.mini-nav-active {
+            &::before {
+                @include mini-nav-active;
+            }
+            & > a > i,
+            & > button > i {
+                color: $white !important;
+            }
+        }
+        &__top {
+            width: 100%;
+            height: 20%;
+            text-align: center;
+            @include mini-nav-link;
+        }
+        &__middle {
+            width: 100%;
+            height: 70%;
+            text-align: center;
+            @include mini-nav-link;
+            & span:hover::before {
+                @include mini-nav-active;
+            }
+        }
+        &__bottom {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            &__avatar {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 99999px;
+                background-color: $white;
+                overflow: hidden;
+                & > img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 99999px;
+                }
+            }
+        }
+    }
+    &__content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: set-max-width($width: $mini-side-nav-width);
+        height: 100%;
+        transition: width 0.9s ease-out;
+        overflow-x: hidden;
+        background: $nav-drawer;
+        color: $white;
+        display: inline-block;
+        &__brand {
+            width: 100%;
+            height: 8rem;
+            background: $nav-drawer;
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: $top-bar-z-index;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow: hidden;
+            text-align: center;
+            & > div {
+                &.logo {
+                    width: 9rem;
+                    height: 4rem;
+                    position: relative;
+                    margin-bottom: 1rem;
+                    & > img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                &.name {
+                }
+            }
+        }
+        &__tab {
+            width: 100%;
+            padding: 0 1rem;
+        }
+    }
+}
+.d__main {
+    width: set-max-width($width: $side-nav-width);
+    min-height: 100vh;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    background-color: $body-bg;
+
+    &__header {
+        width: 100%;
+        height: 4rem;
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: $top-bar-z-index;
+        background: $white;
+        box-shadow: 1px 10px 8px -7px rgba(185, 184, 184, 0.815);
+        -webkit-box-shadow: 1px 10px 8px -7px rgba(185, 184, 184, 0.815);
+        -moz-box-shadow: 1px 10px 8px -7px rgba(185, 184, 184, 0.815);
+
+        & .top__bar__nav__wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5rem;
+        }
+    }
+    &__content {
+        width: 100%;
+        min-height: calc(100vh - 4rem);
+        position: relative;
+    }
+}
+
+.s__row {
+    width: $max-width;
+    &:not(:last-child) {
+        margin-bottom: $row-gutter;
+    }
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    @include respond-only(xs) {
+        flex-direction: column;
+    }
+    & > .s__col {
+        &:not(:last-child) {
+            margin-right: $column-gutter;
+            margin-bottom: $row-gutter;
+        }
+        &.c--12 {
+            @include grid-12;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--11 {
+            @include grid-11;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--10 {
+            @include grid-10;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--9 {
+            @include grid-9;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--8 {
+            @include grid-8;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--7 {
+            @include grid-7;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--6 {
+            @include grid-6;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--5 {
+            @include grid-5;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--4 {
+            @include grid-4;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--3 {
+            @include grid-3;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--2 {
+            @include grid-2;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+        &.c--1 {
+            @include grid-1;
+            @include respond-down(xs) {
+                @include grid-12;
+            }
+        }
+    }
+}

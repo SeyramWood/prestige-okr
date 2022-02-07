@@ -1,0 +1,6 @@
+@function column-width($with, $gutter) {
+    @return calc(#{$with} - (#{$gutter} * 2));
+}
+@function set-max-width($max-width: 100%, $width) {
+    @return calc(#{$max-width} - #{$width});
+}

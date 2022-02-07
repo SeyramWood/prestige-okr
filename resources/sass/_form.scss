@@ -1,0 +1,241 @@
+.form {
+    &__group {
+        width: 100%;
+        height: 4rem;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 0.5rem;
+        background-color: $white;
+        overflow: hidden;
+        -webkit-box-shadow: -1px 2px 2px 1px rgba(204, 197, 190, 0.29);
+        box-shadow: -1px 2px 2px 1px rgba(204, 197, 190, 0.29);
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+
+        & > input {
+            &:not(&[type="checkbox"]) {
+                width: 100%;
+                height: 100%;
+                padding: 0 0.8rem;
+                font-size: 1.2rem;
+                background-color: inherit;
+                font-family: inherit;
+                color: inherit;
+                background-color: inherit;
+                border: none; //1px solid $primary;
+                outline: none;
+                border-radius: 0.2rem;
+                display: block;
+                transition: all 0.2s;
+            }
+        }
+
+        & select {
+            font-size: 1.2rem;
+            font-family: inherit;
+            color: inherit;
+            padding: 0.8rem 0.5rem;
+            background-color: rgba($white, 0.9);
+            border: none; //1px solid $primary;
+            outline: none;
+            border-radius: 0.2rem;
+            display: block;
+            width: 100%;
+            border-bottom: 0.3rem solid transparent;
+            transition: all 0.2s;
+            &:focus {
+                outline: none;
+                box-shadow: 0 1.5rem 0.5rem -1rem rgba(#0000, 0.5);
+                border-bottom: 0.3rem solid $primary;
+                background-color: $white;
+            }
+            &:focus:invalid {
+                border-bottom: 0.3rem solid rgb(231, 61, 10);
+            }
+            &.error {
+                border-bottom: 0.3rem solid rgb(231, 61, 10);
+            }
+        }
+        & .checkbox__label {
+            display: block;
+            margin-bottom: 2rem;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            & input[type="checkbox"] {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            & > span {
+                margin-left: 2.5rem;
+            }
+            & > span::before {
+                position: absolute;
+                content: "";
+                top: 0;
+                left: 0;
+                height: 2rem;
+                width: 2rem;
+                background-color: $white;
+                border-radius: 0.2rem;
+            }
+            & > span::after {
+                position: absolute;
+                content: "";
+                top: 0.4rem;
+                left: 0.7rem;
+                z-index: 1;
+                width: 0.5rem;
+                height: 1rem;
+                border: solid #003399;
+                border-width: 0 3px 3px 0;
+                transform: rotate(45deg);
+                display: none;
+            }
+            & input:invalid + span::before {
+                border-radius: 0.2rem;
+                border: 1.5px solid rgb(231, 61, 10);
+                display: block;
+            }
+            & span.error::before {
+                border-radius: 0.2rem;
+                border: 1.5px solid rgb(231, 61, 10);
+                display: block;
+            }
+            & input:checked ~ span::after {
+                display: block;
+            }
+        }
+        .input__label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            color: black;
+            margin: 0.3rem 0 0.3rem 1rem;
+            transform: translateY(0);
+            transition: all 0.4s;
+        }
+        &__icon {
+            width: 100%;
+            height: 4rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-radius: 0.5rem;
+            background-color: $white;
+
+            overflow: hidden;
+            -webkit-box-shadow: -1px 2px 2px 1px rgba(204, 197, 190, 0.29);
+            box-shadow: -1px 2px 2px 1px rgba(204, 197, 190, 0.29);
+            & > input {
+                &:not(&[type="checkbox"]) {
+                    width: 100%;
+                    height: 100%;
+                    font-size: 1.2rem;
+                    padding-right: 0.8rem;
+                    background-color: inherit;
+                    font-family: inherit;
+                    color: inherit;
+                    background-color: inherit;
+                    border: none; //1px solid $primary;
+                    outline: none;
+                    border-radius: 0.2rem;
+                    display: block;
+                    transition: all 0.2s;
+                }
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 1rem;
+            }
+            & span {
+                height: 100%;
+                font-family: inherit;
+                color: inherit;
+                background-color: inherit;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                & > i {
+                    font-size: 1.5rem !important;
+                }
+                &.prepend {
+                    padding: 0 0.5rem;
+                }
+                &.append {
+                    padding-right: 0.5rem;
+                }
+                &.clickable {
+                    cursor: pointer;
+                }
+            }
+
+            & input {
+                border-radius: 0 !important;
+            }
+        }
+        & input:placeholder-shown + .input__label {
+            transform: translateY(-3.5rem);
+            opacity: 0;
+            visibility: hidden;
+        }
+        & select:placeholder-shown + .input__label {
+            transform: translateY(-3.5rem);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        textarea {
+            font-size: 1.6rem;
+            font-family: inherit;
+            color: inherit;
+            padding: 1.5rem 2rem;
+            height: 10rem;
+            resize: none;
+            line-height: 1.2;
+            background-color: rgba($white, 0.9);
+            border: none;
+            outline: none;
+            border-radius: 0.2rem;
+            width: 100%;
+            border-bottom: 0.3rem solid transparent;
+            transition: all 0.2s;
+            &:focus {
+                outline: none;
+                box-shadow: 0 1.5rem 0.5rem -1rem rgba(#0000, 0.5);
+                border-bottom: 0.3rem solid $primary;
+                background-color: $white;
+            }
+            &:focus:invalid {
+                border-bottom: 0.3rem solid rgb(231, 61, 10);
+            }
+            &.error {
+                border-bottom: 0.3rem solid rgb(231, 61, 10);
+            }
+        }
+        & textarea:placeholder-shown + .input__label {
+            transform: translateY(-4rem);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        & .error-messages {
+            color: rgb(231, 61, 10);
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0.3rem 0 0.3rem 1rem;
+        }
+    }
+    & button.btn {
+        // letter-spacing: 0.3rem;
+        // padding: 1.5rem 5rem;
+        // font-style: italic;
+    }
+    & .form__btn {
+        text-align: center;
+    }
+}

@@ -1,0 +1,31 @@
+// Body
+$body-bg: #f1f0f0;
+$body-bg-1: #e8f1fafb;
+$body-bg-2: #e8f1fa;
+
+// Typography
+$font-family-sans-serif: "Nunito", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$primary: #651fff;
+$secondary: #661fffcb;
+$text: #686767;
+$white: #fff;
+$accent: #82b1ff;
+$error: #ff5252;
+$info: #2196f3;
+$success: #4caf50;
+$warning: #fb8c00;
+$nav-drawer: #011b33;
+
+$main-content: 80%;
+$mini-side-nav-width: 4rem;
+$side-nav-width: 20%; //calc(20% - #{$mini-side-nav-width});
+$max-width: 100%;
+$row-gutter: 1rem;
+$column-gutter: 1rem;
+$column-gutter-1: 0.5rem;
+$top-bar-z-index: 100;
+$drawer-backdrop: 200;

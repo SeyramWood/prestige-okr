@@ -1,0 +1,214 @@
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+@mixin center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@mixin truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // resize: horizontal;
+}
+@mixin mini-nav-active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    content: "";
+    height: 100%;
+    width: 3px;
+    background-color: $white;
+    animation: mini-nav-active-animate 0.5s ease-in forwards;
+}
+@mixin mini-nav-link {
+    & span {
+        position: relative;
+        display: block;
+        margin: 1.5rem 0;
+        cursor: pointer;
+        & > i,
+        & > a > i,
+        & > button > i {
+            color: #e8f1faa4 !important;
+            font-size: 2rem !important;
+            transition: color 0.5s ease-in forwards !important;
+        }
+        &:hover > i {
+            color: $white !important;
+        }
+    }
+}
+@mixin respond-up($breackpoint) {
+    /**
+        MOBILE FIRST APPROACH
+        Extra small devices (portrait phones, less than 576px)
+        No media query for `xs` since this is the default
+        No media query necessary for xs breakpoint as it's effectively `@media (min-width: 0) { ... }`
+    **/
+    @if $breackpoint == sm {
+        @media only screen and (min-width: 36em) {
+            @content;
+        } // Small devices (landscape phones, 576px and up) 576px  / 16px = 36em
+    } @else if $breackpoint == md {
+        @media only screen and (min-width: 48em) {
+            @content;
+        } // Medium devices (tablets, 768px and up) 768px / 16px = 48em
+    } @else if $breackpoint == lg {
+        @media only screen and (min-width: 62em) {
+            @content;
+        } // Large devices (desktops, 992px and up) 992px / 16px = 62em
+    } @else if $breackpoint == xl {
+        @media only screen and (min-width: 75em) {
+            @content;
+        } // Extra large devices (large desktops, 1200px and up) 1200px / 16px = 75em
+    }
+}
+
+/**
+    DESKTOP FIRST APPROACH
+    No media query necessary for xl breakpoint as it has no upper bound on its width
+**/
+@mixin respond-down($breackpoint) {
+    @if $breackpoint == xs {
+        @media only screen and (max-width: 35.999em) {
+            @content;
+        } // Extra Small devices (portrait phones, less than 576px) 575.98px  / 16px = 35.999em
+    } @else if $breackpoint == sm {
+        @media only screen and (max-width: 47.999em) {
+            @content;
+        } // Small devices (landscape phones, less than 768px) 767.98px / 16px = 47.999em
+    } @else if $breackpoint == md {
+        @media only screen and (max-width: 61.999em) {
+            @content;
+        } // Medium devices (tablets, less than 992px) 991.98px / 16px = 61.999em
+    } @else if $breackpoint == lg {
+        @media only screen and (max-width: 74.999em) {
+            @content;
+        } // Large devices (desktops, less than 1200px) 1199.98px / 16px = 74.999em
+    }
+}
+
+/**
+    DESKTOP FIRST APPROACH
+    No media query necessary for xl breakpoint as it has no upper bound on its width
+**/
+
+@mixin respond-only($breackpoint) {
+    @if $breackpoint == xs {
+        @media only screen and (max-width: 35.999em) {
+            @content;
+        } // Extra Small devices (portrait phones, less than 576px)
+    } @else if $breackpoint == sm {
+        @media only screen and (min-width: 36em) and (max-width: 47.999em) {
+            @content;
+        } // Small devices (landscape phones, 576px and up)
+    } @else if $breackpoint == md {
+        @media only screen and (min-width: 48em) and (max-width: 61.999em) {
+            @content;
+        } // Medium devices (tablets, 768px and up)
+    } @else if $breackpoint == lg {
+        @media only screen and (min-width: 62em) and (max-width: 74.999em) {
+            @content;
+        } // Large devices (desktops, 992px and up)
+    } @else if $breackpoint == xl {
+        @media only screen and (min-width: 1200px) {
+            @content;
+        } // Extra Large devices (large desktops, 1200px and up)
+    }
+}
+@mixin flexbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+@mixin flex($values) {
+    -webkit-box-flex: $values;
+    -moz-box-flex: $values;
+    -webkit-flex: $values;
+    -ms-flex: $values;
+    flex: $values;
+}
+@mixin grid-column($width, $height, $gutter) {
+    height: $height;
+    margin: $gutter;
+    width: calc(#{$width} - (#{$gutter} * 2));
+}
+@mixin grid-row {
+    width: $max-width;
+    @include flexbox;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+@mixin card-bg {
+    background-color: #fff;
+    border-radius: 3px;
+    -webkit-box-shadow: -8px 2px 52px -8px rgba(238, 238, 238, 0.95);
+    -moz-box-shadow: -8px 2px 52px -8px rgba(238, 238, 238, 0.95);
+    box-shadow: -8px 2px 52px -8px rgba(238, 238, 238, 0.95);
+    padding: 1rem;
+}
+@mixin grid-1 {
+    width: calc((#{$max-width} - (#{$column-gutter} * 11)) / 12);
+}
+@mixin grid-2 {
+    width: calc((#{$max-width} - (#{$column-gutter} * 5)) / 6);
+}
+@mixin grid-3 {
+    width: calc((#{$max-width} - (#{$column-gutter} * 3)) / 4);
+}
+@mixin grid-4 {
+    width: calc((#{$max-width} - (#{$column-gutter} * 2)) / 3);
+}
+@mixin grid-5 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 11)) / 12) * 5 + #{$column-gutter} *
+            4
+    );
+}
+@mixin grid-6 {
+    width: calc((#{$max-width} - #{$column-gutter}) / 2);
+}
+@mixin grid-7 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 11)) / 12) * 7 + #{$column-gutter} *
+            6
+    );
+}
+@mixin grid-8 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 2)) / 3) * 2 + #{$column-gutter}
+    );
+}
+@mixin grid-9 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 3)) / 4) * 3 + #{$column-gutter}*
+            2
+    );
+}
+@mixin grid-10 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 5)) / 6) * 5 + #{$column-gutter}*
+            4
+    );
+}
+@mixin grid-11 {
+    width: calc(
+        ((#{$max-width} - (#{$column-gutter} * 11)) / 12) * 11 + #{$column-gutter}*
+            10
+    );
+}
+@mixin grid-12 {
+    width: calc(#{$max-width});
+}
