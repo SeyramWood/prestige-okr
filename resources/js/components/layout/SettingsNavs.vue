@@ -17,6 +17,15 @@
       >
         <Link :href="route('settings.team')">Team</Link>
       </li>
+      <li
+        :class="[
+          'mini__sub__navs__link',
+          route().current('settings.profile') && 'nav-active',
+        ]"
+        v-if="!prestigeAccount && isAdmin"
+      >
+        <Link :href="route('settings.subscription')">Subscription</Link>
+      </li>
     </ul>
   </div>
 </template>

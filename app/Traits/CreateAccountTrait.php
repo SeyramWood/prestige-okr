@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Admin;
 use App\Models\Company;
+use App\Models\CompanyAccount;
 use App\Models\Profile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,7 @@ trait CreateAccountTrait
               'email' => $request->companyEmail,
               'type' => "customer",
             ]);
+
             $user = User::create([
               'company_id' => $company->id,
               'role_id' => Role::where('name', 'admin')->first()->id,
@@ -55,6 +57,11 @@ trait CreateAccountTrait
             ]);
             Profile::create([
               'user_id' => $user->id,
+            ]);
+            $company = CompanyAccount::create([
+              'company_id' => $company->id,
+              'creator' => $user->id,
+              'expired_at' => date('Y-m-d H:i:s', strtotime(now() . ' + 14 days')),
             ]);
           });
           if (Auth::attempt(['username' => $request->username, 'password' => $request->password], $request->remember ?? false)) {

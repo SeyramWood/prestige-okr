@@ -1154,6 +1154,27 @@ body.drawer-open {
   border: 0;
 }
 
+.company__details {
+  width: 100%;
+}
+.company__details__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.company__details__body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.company__details__body > div {
+  flex: 1 1;
+  margin: 0.5rem 0;
+}
+.company__details__body .cap {
+  text-transform: capitalize;
+}
+
 /***********************************
             BASIC RESET
 ***********************************/

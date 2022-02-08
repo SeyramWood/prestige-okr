@@ -44,6 +44,7 @@ Route::get('/invite/{email}', 'AuthController@invite')->name('invite');
 Route::post('/add-invite', 'AuthController@addInvite')->name('save.invite');
 Route::post('/signout', 'AuthController@signout')->name('signout');
 Route::post('/logout', 'AuthController@signOut')->name('logout')->middleware(['auth']);
+Route::post('/save-subscription', 'PaystackController@saveSubscription');
 
 
 //Access by both admin and users
@@ -56,6 +57,7 @@ Route::prefix('dashboard')->group(function () {
   Route::get('/settings', 'DashboardController@settings')->name('settings.index');
   Route::get('/settings/profile', 'DashboardController@profile')->name('settings.profile');
   Route::get('/settings/manage-team', 'DashboardController@manageTeam')->name('settings.team');
+  Route::get('/settings/subscription', 'DashboardController@subscription')->name('settings.subscription');
 
   //Objective routes
   Route::post('/add-new-objective', 'ObjectiveController@addObjective');
@@ -84,10 +86,15 @@ Route::prefix('dashboard')->group(function () {
   Route::post('assign-teams', 'TeamController@assignTeams');
 
   //Member routes
-
   Route::post('/send-invite', 'AdminController@sendInvite')->name('send.invite');
   Route::post('/notifications', 'AdminController@notifications')->name('notifications');
   Route::put('/update-user-role/{user}/{role}', 'AdminController@updateUserRole');
   Route::delete('/delete-user/{user}', 'AdminController@deleteUser');
   Route::delete('/delete-users/{users}', 'AdminController@deleteUsers');
+
+  //Company routes
+  Route::put('/update-account-status/{companyAccount}/{status}', 'AdminController@updateCompanyAccountStatus');
+  Route::post('/upgrade-subscription', 'PaystackController@upgradeSubscription');
+  Route::delete('/delete-company-account/{company}', 'AdminController@deleteCompanyAccount');
+  Route::delete('/delete-company-accounts/{companies}', 'AdminController@deleteCompanyAccounts');
 });

@@ -5,17 +5,17 @@
       :items="getCompanies"
       :sort-by="['created_at']"
       :sort-desc="[false, true]"
-      v-model="selectedPeople"
+      v-model="selectedAccounts"
       show-select
       class="elevation-1"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Companies</v-toolbar-title>
+          <v-toolbar-title>Company Accounts</v-toolbar-title>
           <v-spacer></v-spacer>
 
           <v-btn class="ma-2" outlined rounded color="warning">
-            Export People
+            Export Accounts
           </v-btn>
           <!-- <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
@@ -78,14 +78,17 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this person?</v-card-title
+                >Are you sure you want to delete this account?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="closeDelete()"
                   >Cancel</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteUserConfirm()"
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="deleteCompanyAccountConfirm()"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -108,9 +111,6 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item dense @click="assignTeamDialog = true">
-              <v-list-item-title>Assign team</v-list-item-title>
-            </v-list-item>
             <v-list-item dense @click="openDeleteDialog(true)">
               <v-list-item-title>Delete people</v-list-item-title>
             </v-list-item>
@@ -125,36 +125,56 @@
       <template v-slot:item.created_at="{ item }">
         {{ formatDateTime(item.created_at) }}
       </template>
-      <!-- <template v-slot:item.actions="{ item }">
+      <template v-slot:item.account.status="{ item }">
+        <v-chip
+          text-color="white"
+          color="green"
+          small
+          filter
+          pill
+          v-if="item.account.status === 'active'"
+        >
+          {{ item.account.status.toUpperCase() }}
+        </v-chip>
+        <v-chip text-color="white" color="red" small filter pill v-else>
+          {{ item.account.status.toUpperCase() }}
+        </v-chip>
+      </template>
+      <template v-slot:item.actions="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              color="primary"
+              color="black"
               dark
               small
               v-bind="attrs"
               v-on="on"
-              @click="updateUserRole(item)"
+              @click="viewCompanyDetails(item)"
             >
-              mdi-shield-account-outline
+              mdi-eye-outline
             </v-icon>
           </template>
-          <span>Update user role</span>
+          <span>View more</span>
         </v-tooltip>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              color="primary"
+              color="black"
               dark
               v-bind="attrs"
               v-on="on"
-              @click="selectPerson(item.id)"
+              @click="updateAccountStatus(item)"
             >
               mdi-account-check-outline
             </v-icon>
           </template>
-          <span>Assign team</span>
+          <span
+            >{{
+              item.account.status === "active" ? "Deactivate" : "Activate"
+            }}
+            account</span
+          >
         </v-tooltip>
 
         <v-tooltip bottom>
@@ -169,16 +189,102 @@
               mdi-delete
             </v-icon>
           </template>
-          <span>Delete</span>
+          <span>Delete Account</span>
         </v-tooltip>
-      </template> -->
+      </template>
 
       <template v-slot:no-data>
         <v-icon dark color="black"> mdi-database </v-icon>
         <h5>Ooops! No record found.</h5>
       </template>
     </v-data-table>
+    <s-drawer v-model="detailsDrawer">
+      <section class="add__objective">
+        <header class="add__objective__header">
+          <div class="add__objective__header__title">
+            <span>
+              <v-icon>mdi-briefcase-eye-outline</v-icon>
+            </span>
+            <h4>Company Details</h4>
+          </div>
+          <v-btn icon @click="detailsDrawer = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </header>
+        <main>
+          <div class="company__details" v-if="currentCompany">
+            <h1 class="company__details__title">Profile</h1>
+            <div class="company__details__body">
+              <div class="">Name</div>
+              <div class="">{{ currentCompany.name }}</div>
+            </div>
+            <div class="company__details__body">
+              <div class="">E-mail</div>
+              <div class="">{{ currentCompany.email }}</div>
+            </div>
+            <div class="company__details__body">
+              <div class="">Created on</div>
+              <div class="">
+                {{ formatDateTime(currentCompany.created_at) }}
+              </div>
+            </div>
+            <h1 class="company__details__title">Subscription</h1>
 
+            <div class="company__details__body">
+              <div class="">Status</div>
+              <div class="cap">
+                <v-chip
+                  text-color="white"
+                  color="green"
+                  small
+                  filter
+                  pill
+                  v-if="currentCompany.account.status === 'active'"
+                >
+                  {{ currentCompany.account.status.toUpperCase() }}
+                </v-chip>
+                <v-chip text-color="white" color="red" small filter pill v-else>
+                  {{ currentCompany.account.status.toUpperCase() }}
+                </v-chip>
+              </div>
+            </div>
+            <div class="company__details__body">
+              <div class="">Type</div>
+              <div class="cap">
+                {{ currentCompany.account.type }}
+              </div>
+            </div>
+            <div class="company__details__body">
+              <div class="">Members</div>
+              <div class="cap">
+                {{ currentCompany.account.num_members }}
+              </div>
+            </div>
+            <div class="company__details__body">
+              <div class="">Max Members</div>
+              <div class="cap">
+                {{ currentCompany.account.max_num_members }}
+              </div>
+            </div>
+            <div class="company__details__body">
+              <div class="">Expiry</div>
+              <div class="cap">
+                {{
+                  formatDateTime(
+                    currentCompany.account.expired_at.replace(" ", "T")
+                  )
+                }}{{
+                  formatDateDiff(
+                    currentCompany.account.expired_at.replace(" ", "T"),
+                    new Date()
+                  )
+                }}
+              </div>
+            </div>
+          </div>
+        </main>
+      </section>
+    </s-drawer>
     <s-snackbar v-model="snackOpen">
       {{ snackMessage }}
     </s-snackbar>
@@ -190,12 +296,14 @@ import Layout from "../components/layout/Layout";
 import { mapActions, mapGetters } from "vuex";
 import SSnackbar from "../components/SSnackbar";
 import { dateTime } from "../mixins";
+import SDrawer from "../components/SDrawer";
 export default {
   name: "Companies",
   layout: Layout,
   mixins: [dateTime],
   components: {
     SSnackbar,
+    SDrawer,
   },
   props: {
     companies: Array,
@@ -203,27 +311,17 @@ export default {
   computed: {
     ...mapGetters(["getCompanies"]),
     isSelectedPeople() {
-      return this.selectedPeople.length ? true : false;
-    },
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.selectedAccounts.length ? true : false;
     },
   },
   watch: {
-    dialog(val) {
-      val || this.close();
-    },
     dialogDelete(val) {
       val || this.closeDelete();
-    },
-    assignTeamDialog(val) {
-      val || this.closeAssignTeamDialog();
     },
   },
 
   created() {
     this.dispatchCompany({ type: "ADD_COMPANIES", payload: this.companies });
-    console.log(this.companies);
   },
   mounted() {
     this.$nextTick(() => {
@@ -239,8 +337,8 @@ export default {
     search: "",
     dialog: false,
     dialogDelete: false,
-    assignTeamDialog: false,
-    isSendInvite: false,
+    detailsDrawer: false,
+    currentCompany: null,
 
     headers: [
       {
@@ -251,70 +349,26 @@ export default {
       { text: "Company", align: "start", value: "name" },
       { text: "E-mail", value: "email" },
       { text: "Created On", value: "created_at" },
+      { text: "Status", value: "account.status" },
     ],
 
     email: "",
     emailError: "",
-    selectedPerson: "",
-    selectedPeople: [],
+    selectedAccount: "",
+    selectedAccounts: [],
     selectedTeams: "",
     selectedTeamsError: "",
 
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
     isSelected: false,
     selectedTeam: null,
-    deleteManyUsers: false,
+    deleteManyAccounts: false,
   }),
   methods: {
     ...mapActions(["dispatchCompany", "dispatchNotifications"]),
-    sendInvite() {
-      this.isSendInvite = true;
-      this.emailError = "";
-      this.$inertia.post(
-        "/dashboard/send-invite",
-        { email: this.email },
-        {
-          preserveScroll: true,
-          errorBag: "inviteEmailError",
-          onSuccess: (res) => {
-            this.isSendInvite = false;
-            this.showSnackMessage("Invites successfully sent.");
-            this.dispatchNotifications({
-              type: "ADD_NOTIFICATION",
-              payload: res.notification,
-            });
-            this.close();
-          },
-          onError: (err) => {
-            this.isSendInvite = false;
-            this.showSnackMessage(err.invite);
-            this.emailError = err.email || "";
-            this.close();
-          },
-        }
-      );
-    },
-    selectPerson(id) {
-      this.selectedPerson = id;
-      this.assignTeamDialog = true;
-    },
-    openDeleteDialog(many, id = "") {
-      this.deleteManyUsers = many;
-      this.selectedPerson = id;
+
+    openDeleteDialog(many, id = null) {
+      this.deleteManyAccounts = many;
+      this.selectedAccount = id;
       this.dialogDelete = true;
     },
     updateUserRole(user) {
@@ -339,104 +393,77 @@ export default {
           console.log(err);
         });
     },
-    assignTeam() {
-      this.$inertia.post(
-        `/dashboard/assign-team/${this.selectedPerson}`,
-        { teams: this.selectedTeams },
-        {
-          preserveScroll: true,
-          errorBag: "assignTeamError",
-          onSuccess: (page) => {
-            this.closeAssignTeamDialog();
-            this.showSnackMessage("Teams successfully assigned.");
-            this.dispatchNotifications({
-              type: "ADD_NOTIFICATION",
-              payload: page.notification,
-            });
-          },
-          onError: (err) => {
-            this.closeAssignTeamDialog();
-            if (err.teams) {
-              this.selectedTeamsError = err.teams || "";
-            } else {
-              this.showSnackMessage(err.assign);
-            }
-          },
-        }
-      );
-    },
-
-    assignTeams() {
-      const users = this.selectedPeople.map((p) => p.id);
-      const teams = this.selectedTeams;
-      this.$inertia.post(
-        `/dashboard/assign-teams`,
-        { users, teams },
-        {
-          preserveScroll: true,
-          onSuccess: (page) => {
-            this.closeAssignTeamDialog();
-            this.showSnackMessage("Teams successfully assigned.");
-            // this.dispatchNotifications({
-            //   type: "ADD_NOTIFICATION",
-            //   payload: page.notification,
-            // });
-          },
-          onError: (err) => {
-            if (err.teams) {
-              this.closeAssignTeamDialog();
-              this.selectedTeamsError = err.teams || "";
-            } else {
-              this.showSnackMessage(err.assign);
-            }
-          },
-        }
-      );
-    },
-
-    deleteUser() {
-      this.$axios
-        .delete(`/dashboard/delete-user/${this.selectedPerson}`)
-        .then((res) => {
-          this.showSnackMessage("Person successfully deleted.");
-          this.dispatchUser({
-            type: "DELETE_PERSON",
-            payload: this.selectedPerson,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    deleteUsers() {
-      const users = this.selectedPeople.map((p) => p.id);
-      this.$axios
-        .delete(`/dashboard/delete-users/${users}`)
-        .then((res) => {
-          this.showSnackMessage("People successfully deleted.");
-          this.dispatchUser({
-            type: "DELETE_PEOPLE",
-            payload: users,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    deleteUserConfirm() {
-      this.closeDelete();
-      if (this.deleteManyUsers) {
-        this.deleteUsers();
-      } else {
-        this.deleteUser();
-      }
-    },
-
-    close() {
-      this.dialog = false;
+    viewCompanyDetails(company) {
+      this.currentCompany = company;
       this.$nextTick(() => {
-        this.email = "";
+        this.detailsDrawer = true;
       });
+    },
+    updateAccountStatus(company) {
+      const newStatus =
+        company.account.status === "active" ? "inactive" : "active";
+      this.$axios
+        .put(
+          `/dashboard/update-account-status/${company.account.id}/${newStatus}`
+        )
+        .then((res) => {
+          if (res.data.updated) {
+            this.showSnackMessage("Account status successfully updated.");
+            this.$nextTick(() => {
+              this.dispatchCompany({
+                type: "UPDATE_COMPANY_ACCOUNT_STATUS",
+                payload: {
+                  ...company,
+                  account: {
+                    ...company.account,
+                    status: newStatus,
+                  },
+                },
+              });
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    deleteCompanyAccount() {
+      this.$axios
+        .delete(`/dashboard/delete-company-account/${this.selectedAccount}`)
+        .then((res) => {
+          this.showSnackMessage("Account successfully deleted.");
+          this.dispatchCompany({
+            type: "DELETE_COMPANY_ACCOUNT",
+            payload: this.selectedAccount,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteCompanyAccounts() {
+      const companies = this.selectedAccounts.map((a) => a.id);
+      this.$axios
+        .delete(`/dashboard/delete-company-accounts/${companies}`)
+        .then((res) => {
+          this.showSnackMessage("Account successfully deleted.");
+          this.dispatchCompany({
+            type: "DELETE_COMPANY_ACCOUNTS",
+            payload: companies,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteCompanyAccountConfirm() {
+      this.closeDelete();
+      if (this.deleteManyAccounts) {
+        this.deleteCompanyAccounts();
+      } else {
+        this.deleteCompanyAccount();
+      }
     },
 
     closeDelete() {
@@ -444,28 +471,6 @@ export default {
       this.$nextTick(() => {
         //
       });
-    },
-
-    closeAssignTeamDialog() {
-      this.assignTeamDialog = false;
-      this.selectedTeamsError = "";
-      this.selectedPerson = "";
-      this.selectedPeople = [];
-      this.selectedTeams = "";
-    },
-
-    showAssignTeamDialog(id = null) {
-      if (id) {
-        this.selectedPeople.onePeople = id;
-        this.selectedPeople.multiplePeople = false;
-      } else {
-        this.selectedPeople.multiplePeople = true;
-      }
-      this.assignTeamDialog = true;
-    },
-
-    setSelectedTeam(value) {
-      this.selectedTeam = value;
     },
   },
 };

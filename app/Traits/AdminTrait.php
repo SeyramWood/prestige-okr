@@ -68,9 +68,15 @@ trait AdminTrait
     }
     return null;
   }
-  public function getAllCompanies()
+  public function getAllCompanies($id = null)
   {
-    return Company::whereNotNull('type')->get();
+    if ($id) {
+      return Company::with('account')
+        ->where('id', $id)
+        ->whereNotNull('type')
+        ->first();
+    }
+    return Company::with('account')->whereNotNull('type')->get();
   }
 
   public function createTeam($request)

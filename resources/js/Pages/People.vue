@@ -170,7 +170,11 @@
           {{ `${item.first_name || ""} ${item.last_name || ""}` }}
         </template>
         <template v-slot:item.last_active="{ item }">
-          {{ formatDateTime(item.last_active.replace(" ", "T")) }}
+          {{
+            item.last_active
+              ? formatDateTime(item.last_active.replace(" ", "T"))
+              : "Yet to sign in"
+          }}
         </template>
         <template v-slot:item.status="{ item }">
           <div class="status on" v-if="item.status"></div>
@@ -180,7 +184,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
-                color="primary"
+                color="black"
                 dark
                 small
                 v-bind="attrs"
@@ -196,7 +200,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
-                color="primary"
+                color="black"
                 dark
                 v-bind="attrs"
                 v-on="on"
@@ -281,7 +285,11 @@
           {{ `${item.first_name || ""} ${item.last_name || ""}` }}
         </template>
         <template v-slot:item.last_active="{ item }">
-          {{ formatDateTime(item.last_active.replace(" ", "T")) }}
+          {{
+            item.last_active
+              ? formatDateTime(item.last_active.replace(" ", "T"))
+              : "Yet to sign in"
+          }}
         </template>
         <template v-slot:item.status="{ item }">
           <div class="status on" v-if="item.status"></div>

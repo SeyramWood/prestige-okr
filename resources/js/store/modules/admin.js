@@ -79,6 +79,15 @@ const actions = {
                 case "ADD_COMPANIES":
                     state.companies = payload;
                     break;
+                case "UPDATE_COMPANY_ACCOUNT_STATUS":
+                    commit("updateCompanyAccountStatus", payload);
+                    break;
+                case "DELETE_COMPANY_ACCOUNT":
+                    commit("deleteCompany", payload);
+                    break;
+                case "DELETE_COMPANY_ACCOUNTS":
+                    commit("deleteCompanies", payload);
+                    break;
                 default:
                     state.company = payload;
                     break;
@@ -128,6 +137,27 @@ const mutations = {
         ids.forEach(id => {
             state.people.splice(
                 state.people.findIndex(t => t.id === id),
+                1
+            );
+        });
+    },
+    updateCompanyAccountStatus: (state, company) => {
+        state.companies.splice(
+            state.companies.findIndex(c => c.id === company.id),
+            1,
+            company
+        );
+    },
+    deleteCompany: (state, id) => {
+        state.companies.splice(
+            state.companies.findIndex(c => c.id === id),
+            1
+        );
+    },
+    deleteCompanies: (state, ids) => {
+        ids.forEach(id => {
+            state.companies.splice(
+                state.companies.findIndex(c => c.id === id),
                 1
             );
         });

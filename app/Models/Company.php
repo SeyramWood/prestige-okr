@@ -11,10 +11,9 @@ class Company extends Model
 
     protected $guarded = [];
 
-    public function admin()
+    public function account()
     {
-
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(CompanyAccount::class);
     }
 
     public function users()

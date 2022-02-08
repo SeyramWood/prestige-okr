@@ -34,6 +34,19 @@ trait Generate
     }
     return $id;
   }
+  public static function referenceCode($length)
+  {
+    $characters = '00123456789';
+    $code = '';
+    for ($i = 1; $i <= $length; $i++) {
+      $rand = random_int(0, strlen($characters) - 1);
+      if (strlen($code) === 3 || strlen($code) === 7) {
+        $code  .= '-';
+      }
+      $code  .= substr($characters, $rand, 1);
+    }
+    return $code;
+  }
   public static function uuid4($data = null): string
   {
     // Generate 16 bytes (128 bits) of random data or use the data passed into the function.

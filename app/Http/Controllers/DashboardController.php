@@ -87,6 +87,12 @@ class DashboardController extends Controller
             'companyInfo' => fn () => $this->getCompany()
         ]);
     }
+    public function subscription()
+    {
+        return inertia('Settings/Subscription', [
+            'companyInfo' => fn () => $this->getAllCompanies(Auth::user()->id)
+        ]);
+    }
 
 
 

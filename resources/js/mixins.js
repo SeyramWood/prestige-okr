@@ -99,6 +99,12 @@ const dateTime = {
                 `${m}-${d}-${new Date().getUTCFullYear()}`
             ).toISOString();
         },
+        formatDateDiff(d1, d2) {
+            const ONE_DAY = 1000 * 60 * 60 * 24;
+            const diff = Math.abs(new Date(d1) - new Date(d2));
+            const date = Math.round(diff / ONE_DAY);
+            return ` (${date} ${date > 1 ? "days" : "day"} more)`;
+        },
         formatDateMonth(str) {
             const date = this.$luxon.fromISO(str).toFormat("MMM dd");
             if (date === "Invalid DateTime") return "";

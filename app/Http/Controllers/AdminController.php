@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\CompanyAccount;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -54,6 +56,13 @@ class AdminController extends Controller
         $user->save();
         return response()->json(['updated' => true, 'role' => $new_role]);
     }
+    public function updateCompanyAccountStatus(CompanyAccount $companyAccount, $status)
+    {
+        $companyAccount->status = $status;
+        $companyAccount->save();
+        return response()->json(['updated' => true]);
+    }
+
     public function deleteUser(User $user)
     {
         $user->delete();
@@ -62,6 +71,16 @@ class AdminController extends Controller
     public function deleteUsers($users)
     {
         User::whereIn('id', explode(',', $users))->delete();
+        return response()->json(['deleted' => true]);
+    }
+    public function deleteCompanyAccount(Company $company)
+    {
+        $company->delete();
+        return response()->json(['deleted' => true]);
+    }
+    public function deleteCompanyAccounts($companies)
+    {
+        Company::whereIn('id', explode(',', $companies))->delete();
         return response()->json(['deleted' => true]);
     }
 }
